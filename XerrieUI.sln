@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XerrieUI.Demo", "XerrieUI.Demo\XerrieUI.Demo.csproj", "{82C2A0A6-ABEE-418F-9FA0-EDBF0A027F8D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XerrieUI.Core", "XerrieUI.Core\XerrieUI.Core.csproj", "{D4FED596-87D0-4232-B07E-0425A67D8176}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{F9CB5A1B-2B9D-43EA-AF6D-5A2E87B161BD}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XerrieUI.Native", "XerrieUI.Native\XerrieUI.Native.csproj", "{8E3B0B79-AFCC-42DA-83AE-3C9D30040C0E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XerrieUI.Drawing", "XerrieUI.Drawing\XerrieUI.Drawing.csproj", "{4990D7D2-26A8-4AC4-B730-F37E305276AE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{82C2A0A6-ABEE-418F-9FA0-EDBF0A027F8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82C2A0A6-ABEE-418F-9FA0-EDBF0A027F8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82C2A0A6-ABEE-418F-9FA0-EDBF0A027F8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82C2A0A6-ABEE-418F-9FA0-EDBF0A027F8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4FED596-87D0-4232-B07E-0425A67D8176}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4FED596-87D0-4232-B07E-0425A67D8176}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4FED596-87D0-4232-B07E-0425A67D8176}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4FED596-87D0-4232-B07E-0425A67D8176}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E3B0B79-AFCC-42DA-83AE-3C9D30040C0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E3B0B79-AFCC-42DA-83AE-3C9D30040C0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E3B0B79-AFCC-42DA-83AE-3C9D30040C0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E3B0B79-AFCC-42DA-83AE-3C9D30040C0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4990D7D2-26A8-4AC4-B730-F37E305276AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4990D7D2-26A8-4AC4-B730-F37E305276AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4990D7D2-26A8-4AC4-B730-F37E305276AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4990D7D2-26A8-4AC4-B730-F37E305276AE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
