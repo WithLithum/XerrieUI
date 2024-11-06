@@ -16,4 +16,8 @@ SPDX-License-Identifier: Apache-2.0
       <ProjectReference Include="..\XerrieUI.Native\XerrieUI.Native.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="JetBrains.Annotations" Version="2024.3.0" />
+    </ItemGroup>
+
 </Project>

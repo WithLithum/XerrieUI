@@ -7,6 +7,7 @@ using XerrieUI.Core.Exceptions;
 using XerrieUI.Core.Forms;
 using XerrieUI.Core.Platform;
 using XerrieUI.Core.Platform.Events;
+using XerrieUI.Drawing.Fonts.Config;
 using XerrieUI.Native;
 
 namespace XerrieUI.Core;
@@ -29,6 +30,7 @@ public static class Application
     {
         try
         {
+            FontConfig.Initialize();
             Connection = XcbConnection.Connect(null);
         }
         catch (Exception e)
@@ -61,5 +63,6 @@ public static class Application
     private static void Shutdown()
     {
         Connection?.Dispose();
+        FontConfig.Shutdown();
     }
 }
