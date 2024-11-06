@@ -22,7 +22,7 @@ public partial class Window : AbstractParentControl, IDisposable, IRenderingPare
     private Window(XcbWindowHandle xcbWindow, Size size)
     {
         _xcbWindow = xcbWindow;
-        _renderer = new WindowRenderer(XcbCairoSurface.Create(Application.EnsureConnection(),
+        _renderer = new WindowRenderer(this, XcbCairoSurface.Create(Application.EnsureConnection(),
             _xcbWindow,
             size));
         Application.WindowManager.Map(_xcbWindow.Handle, this);

@@ -2,29 +2,28 @@
 // 
 // SPDX-License-Identifier: Apache-2.0
 
+using System.Drawing;
 using XerrieUI.Core.Forms.Controls;
+using XerrieUI.Drawing;
 
 namespace XerrieUI.Core.Drawing;
 
-internal class ParentRenderer
+public abstract class ParentRenderer : ControlRenderer
 {
-    private readonly HashSet<IRenderingParent> _controls = [];
+    private readonly AbstractParentControl _parentControl;
 
-    public void Add(IRenderingParent control)
+    protected ParentRenderer(AbstractParentControl parentControl)
     {
-        _controls.Add(control);
+        _parentControl = parentControl;
     }
 
-    public void Remove(IRenderingParent control)
+    public void Update(Rectangle rectangle)
     {
-        _controls.Remove(control);
-    }
-    
-    public void Update()
-    {
-        foreach (var control in _controls.Where(control => control.Updated))
+        foreach (var control in _parentControl.Children.Where(control => control.Updated))
         {
-            control.Render(control.GetRenderer());
+            control.Render(this);
         }
     }
+
+    public abstract override CairoContext Graphics { get; }
 }

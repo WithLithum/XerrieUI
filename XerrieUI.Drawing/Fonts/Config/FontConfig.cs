@@ -65,14 +65,14 @@ public class FontConfig : IDisposable
     /// Attempts to acquire the best font matching with the specified pattern,
     /// and creates a pattern explicitly referencing that font.
     /// </summary>
-    /// <param name="pattern">The pattern to match with. Prior to matching, <see cref="FontSearchPattern.SetDefaultsIfAbsent"/>
-    /// and <see cref="FontSearchPattern.SetMatchKind"/> must be called.</param>
+    /// <param name="pattern">The pattern to match with. Prior to matching, <see cref="FontPattern.SetDefaultsIfAbsent"/>
+    /// and <see cref="FontPattern.SetMatchKind"/> must be called.</param>
     /// <param name="result">The resulting pattern, or <see langword="null"/> if not found.</param>
     /// <returns>The matching result.</returns>
-    public FontMatchResult TryMatch(FontSearchPattern pattern, [MustDisposeResource] out FontSearchPattern? result)
+    public FontMatchResult TryMatch(FontPattern pattern, [MustDisposeResource] out FontPattern? result)
     {
         var retPattern = FcFontMatch(Handle, pattern.Handle, out var matchResult);
-        result = retPattern != IntPtr.Zero ? new FontSearchPattern(retPattern) : null;
+        result = retPattern != IntPtr.Zero ? new FontPattern(retPattern) : null;
 
         Console.WriteLine(matchResult);
         if (matchResult == FontMatchResult.Match) return matchResult;

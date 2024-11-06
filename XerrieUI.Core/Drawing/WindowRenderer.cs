@@ -3,27 +3,30 @@
 // SPDX-License-Identifier: Apache-2.0
 
 using System.Drawing;
+using XerrieUI.Core.Forms;
 using XerrieUI.Drawing;
 
 namespace XerrieUI.Core.Drawing;
 
-public class WindowRenderer : IDisposable, IRenderer
+internal class WindowRenderer : ParentRenderer
 {
     private readonly XcbCairoSurface _surface;
 
-    public WindowRenderer(XcbCairoSurface surface)
+    public WindowRenderer(Window window, XcbCairoSurface surface) : base(window)
     {
         _surface = surface;
         Graphics = new CairoContext(surface);
     }
 
-    public void Dispose()
+    public override void Dispose()
     {
         _surface.Dispose();
+        base.Dispose();
+        
         GC.SuppressFinalize(this);
     }
 
-    public CairoContext Graphics { get; }
+    public override CairoContext Graphics { get; }
 
     public void SetSize(Size size)
     {

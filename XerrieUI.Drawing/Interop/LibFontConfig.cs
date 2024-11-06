@@ -120,6 +120,17 @@ internal static partial class LibFontConfig
     internal static partial FcBool FcPatternAdd(IntPtr pattern, string property, FcValue value, FcBool append);
 
     [LibraryImport(LibName, StringMarshalling = StringMarshalling.Utf8)]
+    internal static unsafe partial FontMatchResult FcPatternGetDouble(IntPtr pattern, string property, int num,
+        double* ptr);
+    
+    [LibraryImport(LibName, StringMarshalling = StringMarshalling.Utf8)]
+    internal static unsafe partial FontMatchResult FcPatternGetInteger(IntPtr pattern, string property, int num,
+        int* ptr);
+    
+    [LibraryImport(LibName, StringMarshalling = StringMarshalling.Utf8)]
+    internal static unsafe partial FontMatchResult FcPatternGetString(IntPtr pattern, string property, int num, IntPtr* ptr);
+    
+    [LibraryImport(LibName, StringMarshalling = StringMarshalling.Utf8)]
     internal static partial FcBool FcPatternAddString(IntPtr pattern, string property, string value);
     
     [LibraryImport(LibName, StringMarshalling = StringMarshalling.Utf8)]

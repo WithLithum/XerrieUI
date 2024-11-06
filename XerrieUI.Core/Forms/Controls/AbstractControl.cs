@@ -28,7 +28,7 @@ public abstract class AbstractControl : IRenderable
     
     public bool Updated { get; private set; }
     
-    public IRenderable? Parent { get; protected set; }
+    public IRenderable? Parent { get; protected internal set; }
 
     public Point Location
     {
@@ -80,16 +80,24 @@ public abstract class AbstractControl : IRenderable
         _size = size;
         Resized?.Invoke(this, EventArgs.Empty);
     }
-    
+
     /// <summary>
     /// When overriden, causes the "effective" size (to the OS) to be updated.
     /// </summary>
     /// <param name="size">The size to apply.</param>
-    protected abstract void ApplyControlSize(Size size);
-    
+    protected virtual void ApplyControlSize(Size size)
+    {
+        _size = size;
+        Resized?.Invoke(this, EventArgs.Empty);
+    }
+
     /// <summary>
     /// When overriden, causes the "effective" location (to the OS) to be updated.
     /// </summary>
     /// <param name="location">The location to apply.</param>
-    protected abstract void ApplyControlLocation(Point location);
+    protected virtual void ApplyControlLocation(Point location)
+    {
+        _location = location;
+        Moved?.Invoke(this, EventArgs.Empty);
+    }
 }

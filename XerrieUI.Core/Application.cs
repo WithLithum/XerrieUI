@@ -7,6 +7,7 @@ using XerrieUI.Core.Exceptions;
 using XerrieUI.Core.Forms;
 using XerrieUI.Core.Platform;
 using XerrieUI.Core.Platform.Events;
+using XerrieUI.Drawing.Fonts;
 using XerrieUI.Drawing.Fonts.Config;
 using XerrieUI.Native;
 
@@ -18,6 +19,8 @@ public static class Application
         Assembly.GetEntryAssembly()?.GetName().Name ?? "XerrieApplication";
     
     private static XcbConnection? Connection { get; set; }
+
+    internal static FontManager FontManager { get; } = new();
 
     internal static XcbConnection EnsureConnection()
     {

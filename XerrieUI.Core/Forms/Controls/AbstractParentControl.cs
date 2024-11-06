@@ -8,7 +8,12 @@ namespace XerrieUI.Core.Forms.Controls;
 
 public abstract class AbstractParentControl : AbstractControl
 {
-    public IList<AbstractControl> Children { get; } = new List<AbstractControl>();
+    protected AbstractParentControl()
+    {
+        Children = new ControlChildrenCollection(this);
+    }
+    
+    public ControlChildrenCollection Children { get; }
 
     public override void Render(IRenderer renderer)
     {

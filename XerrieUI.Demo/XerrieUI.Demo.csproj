@@ -13,6 +13,7 @@ SPDX-License-Identifier: Apache-2.0
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\XerrieUI.Controls\XerrieUI.Controls.csproj" />
       <ProjectReference Include="..\XerrieUI.Core\XerrieUI.Core.csproj" />
     </ItemGroup>
 

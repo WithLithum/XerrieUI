@@ -8,15 +8,15 @@ using static XerrieUI.Drawing.Interop.LibFontConfig;
 
 namespace XerrieUI.Drawing.Fonts.Config;
 
-public class FontSearchPattern : IDisposable, ICloneable
+public class FontPattern : IDisposable, ICloneable
 {
     #region Constructors
-    internal FontSearchPattern(IntPtr handle)
+    internal FontPattern(IntPtr handle)
     {
         Handle = handle;
     }
 
-    public FontSearchPattern() : this(FcPatternCreate())
+    public FontPattern() : this(FcPatternCreate())
     {
     }
     #endregion
@@ -34,7 +34,7 @@ public class FontSearchPattern : IDisposable, ICloneable
         GC.SuppressFinalize(this);
     }
 
-    ~FontSearchPattern()
+    ~FontPattern()
     {
         ReleaseUnmanagedResources();
     }
@@ -69,6 +69,38 @@ public class FontSearchPattern : IDisposable, ICloneable
         {
             throw FontConfigException.CreateAddFailed();
         }
+    }
+
+    public unsafe double GetDoubleProperty(string property, int index)
+    {
+        var result = 0.0;
+        var matchResult = FcPatternGetDouble(Handle, property, index, &result);
+        if (matchResult != FontMatchResult.Match)
+        {
+            throw FontConfigException.CreateFromGetPropertyResult(matchResult);
+        }
+        
+        return result;
+    }
+    
+    public unsafe int GetInt32Property(string property, int index)
+    {
+        var result = 0;
+        var matchResult = FcPatternGetInteger(Handle, property, index, &result);
+        if (matchResult != FontMatchResult.Match)
+        {
+            throw FontConfigException.CreateFromGetPropertyResult(matchResult);
+        }
+        
+        return result;
+    }
+    
+    public unsafe string? GetStringProperty(string property, int index)
+    {
+        IntPtr ptr = 0;
+        var matchResult = FcPatternGetString(Handle, property, index, &ptr);
+        Console.WriteLine("GetStringProperty: {0}", matchResult);
+        return Marshal.PtrToStringUTF8(ptr);
     }
 
     /// <summary>
@@ -107,13 +139,13 @@ public class FontSearchPattern : IDisposable, ICloneable
     }
     
     /// <summary>
-    /// Creates a new instance of <see cref="FontSearchPattern"/> that matches the current instance.
+    /// Creates a new instance of <see cref="FontPattern"/> that matches the current instance.
     /// The returned instance and the current instance may be modified without affecting each other.
     /// </summary>
-    /// <returns>A new instance of <see cref="FontSearchPattern"/> that matches the current instance.</returns>
-    public FontSearchPattern Clone()
+    /// <returns>A new instance of <see cref="FontPattern"/> that matches the current instance.</returns>
+    public FontPattern Clone()
     {
-        return new FontSearchPattern(FcPatternDuplicate(Handle));
+        return new FontPattern(FcPatternDuplicate(Handle));
     }
 
     /// <summary>
@@ -144,21 +176,21 @@ public class FontSearchPattern : IDisposable, ICloneable
     /// <para>See <see href="https://fontconfig.pages.freedesktop.org/fontconfig/fontconfig-user.html#font-names">this page</see> for a detailed explaination.</para>
     /// </remarks>
     /// <returns>The parsed instance.</returns>
-    public static FontSearchPattern Parse(string str)
+    public static FontPattern Parse(string str)
     {
-        return new FontSearchPattern(FcNameParse(str));
+        return new FontPattern(FcNameParse(str));
     }
     
     /// <summary>
     /// Increments the reference count of the specified pattern and returns a new
-    /// instance of <see cref="FontSearchPattern"/> representing the specified pattern.
+    /// instance of <see cref="FontPattern"/> representing the specified pattern.
     /// </summary>
     /// <param name="handle">The handle. It must be a pointer to <c>FcPattern</c>.</param>
-    /// <returns>The created <see cref="FontSearchPattern"/> instance.</returns>
-    public static FontSearchPattern Reference(IntPtr handle)
+    /// <returns>The created <see cref="FontPattern"/> instance.</returns>
+    public static FontPattern Reference(IntPtr handle)
     {
         FcPatternReference(handle);
-        return new FontSearchPattern(handle);
+        return new FontPattern(handle);
     }
     
     #endregion

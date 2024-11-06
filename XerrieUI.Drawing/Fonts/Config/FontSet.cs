@@ -24,20 +24,20 @@ public class FontSet : IDisposable
     /// <summary>
     /// References the specified pattern, and adds it to the font pattern set.
     /// </summary>
-    /// <param name="pattern">The pattern to add. Prior to adding, <see cref="FontSearchPattern.SetMatchKind"/>
-    /// and <see cref="FontSearchPattern.SetDefaultsIfAbsent"/> must be called.</param>
+    /// <param name="pattern">The pattern to add. Prior to adding, <see cref="FontPattern.SetMatchKind"/>
+    /// and <see cref="FontPattern.SetDefaultsIfAbsent"/> must be called.</param>
     /// <remarks>
     /// <para>
     /// The <c>fontconfig</c> library automatically disposes the pattern added to the unmanaged
     /// pattern set. To counter this behaviour, this <see cref="Add"/> method implementation adds an
-    /// unmanaged reference to the <see cref="FontSearchPattern"/> instance.
+    /// unmanaged reference to the <see cref="FontPattern"/> instance.
     /// </para>
     /// <para>
-    /// The disposing of the <see cref="FontSearchPattern"/> unmanaged resources is left to be dealt by the
+    /// The disposing of the <see cref="FontPattern"/> unmanaged resources is left to be dealt by the
     /// managed infrastructure.
     /// </para>
     /// </remarks>
-    public void Add(FontSearchPattern pattern)
+    public void Add(FontPattern pattern)
     {
         FcPatternReference(pattern.Handle);
         FcFontSetAdd(_handle, pattern.Handle);

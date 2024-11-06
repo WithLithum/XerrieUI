@@ -2,11 +2,16 @@
 // 
 // SPDX-License-Identifier: Apache-2.0
 
+using System.Drawing;
 using XerrieUI.Drawing;
+using XerrieUI.Drawing.Patterns;
 
 namespace XerrieUI.Core.Drawing;
 
 public interface IRenderer
 {
     CairoContext Graphics { get; }
+    
+    void DrawText(CairoPattern pattern, Point point, string text);
+    void SetFont(string pattern);
 }

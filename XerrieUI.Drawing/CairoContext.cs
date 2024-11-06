@@ -52,7 +52,12 @@ public class CairoContext : IDisposable, IEquatable<CairoContext>
     public void FillText(CairoPattern pattern, CairoFont font, double size, Point point, string text)
     {
         LibCairo.cairo_set_font_face(_handle, font.Handle);
+        
+        EnsureSuccess();
+        
         LibCairo.cairo_set_font_size(_handle, size);
+        
+        EnsureSuccess();
         
         LibCairo.cairo_set_source(_handle, pattern.Handle);
         
