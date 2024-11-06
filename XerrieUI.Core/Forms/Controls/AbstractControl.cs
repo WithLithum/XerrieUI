@@ -24,19 +24,22 @@ public abstract class AbstractControl : IRenderable
     public Rectangle Bounds { get; set; }
 
     public Color BackgroundColor { get; set; } = Color.White;
+    public Color ForegroundColor { get; set; } = Color.Black;
     
     public bool Updated { get; private set; }
+    
+    public IRenderable? Parent { get; protected set; }
 
     public Point Location
     {
         get => _location;
-        set => SetControlLocation(value);
+        set => ApplyControlLocation(value);
     }
 
     public Size Size
     {
         get => _size;
-        set => SetControlSize(value);
+        set => ApplyControlSize(value);
     }
     
     public virtual void Render(IRenderer renderer)
@@ -56,18 +59,37 @@ public abstract class AbstractControl : IRenderable
         Updated = false;
     }
 
-    protected void OnMove(Point moveTo)
+    /// <summary>
+    /// Updates the value of the <see cref="Location"/> property, and triggers the
+    /// <see cref="Moved"/> event.
+    /// </summary>
+    /// <param name="moveTo">The location value to set to.</param>
+    protected virtual void UpdateLocation(Point moveTo)
     {
         _location = moveTo;
         Moved?.Invoke(this, EventArgs.Empty);
     }
 
-    protected virtual void OnResize(Size size)
+    /// <summary>
+    /// Updates the value of the <see cref="Size"/> property, and triggers the
+    /// <see cref="Resized"/> event.
+    /// </summary>
+    /// <param name="size"></param>
+    protected virtual void UpdateSize(Size size)
     {
         _size = size;
         Resized?.Invoke(this, EventArgs.Empty);
     }
     
-    protected abstract void SetControlSize(Size size);
-    protected abstract void SetControlLocation(Point location);
+    /// <summary>
+    /// When overriden, causes the "effective" size (to the OS) to be updated.
+    /// </summary>
+    /// <param name="size">The size to apply.</param>
+    protected abstract void ApplyControlSize(Size size);
+    
+    /// <summary>
+    /// When overriden, causes the "effective" location (to the OS) to be updated.
+    /// </summary>
+    /// <param name="location">The location to apply.</param>
+    protected abstract void ApplyControlLocation(Point location);
 }

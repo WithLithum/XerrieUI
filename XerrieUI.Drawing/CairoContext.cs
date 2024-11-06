@@ -48,6 +48,23 @@ public class CairoContext : IDisposable, IEquatable<CairoContext>
     }
     
     #endregion
+
+    public void FillText(CairoPattern pattern, CairoFont font, double size, Point point, string text)
+    {
+        LibCairo.cairo_set_font_face(_handle, font.Handle);
+        LibCairo.cairo_set_font_size(_handle, size);
+        
+        LibCairo.cairo_set_source(_handle, pattern.Handle);
+        
+        LibCairo.cairo_move_to(_handle, point.X, point.Y);
+        LibCairo.cairo_show_text(_handle, text);
+        
+        // TODO extents
+        
+        LibCairo.cairo_fill(_handle);
+        
+        EnsureSuccess();
+    }
     
     public void FillRectangle(CairoPattern pattern, RectangleF rect)
     {

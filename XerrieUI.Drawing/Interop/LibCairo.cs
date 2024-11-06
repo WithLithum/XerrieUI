@@ -50,6 +50,21 @@ internal static partial class LibCairo
 
     [LibraryImport(LibName)]
     internal static partial void cairo_pop_group_to_source(IntPtr cr);
+
+    #region Fonts
+
+    [LibraryImport(LibName)]
+    internal static partial void cairo_set_font_face(IntPtr cairo,
+        IntPtr fontFace);
+    
+    [LibraryImport(LibName)]
+    internal static partial void cairo_font_face_destroy(IntPtr fontFace);
+    
+    [LibraryImport(LibName)]
+    internal static partial IntPtr cairo_ft_font_face_create_for_ft_face(IntPtr ftFace,
+        int loadFlags);
+
+    #endregion
     
     #region Drawing
 
@@ -66,11 +81,24 @@ internal static partial class LibCairo
     internal static partial void cairo_rectangle(IntPtr cr, double x, double y, double width, double height);
     
     [LibraryImport(LibName)]
+    internal static partial void cairo_move_to(IntPtr cr, double x, double y);
+    
+    [LibraryImport(LibName)]
     internal static partial void cairo_stroke(IntPtr cr);
 
     [LibraryImport(LibName)]
     internal static partial void cairo_fill(IntPtr cr);
 
+    #endregion
+    
+    #region Text Rendering
+    
+    [LibraryImport(LibName, StringMarshalling = StringMarshalling.Utf8)]
+    internal static partial void cairo_show_text(IntPtr cr, string utf8);
+
+    [LibraryImport(LibName)]
+    internal static partial void cairo_set_font_size(IntPtr cr, double size);
+    
     #endregion
     
     #region Patterns

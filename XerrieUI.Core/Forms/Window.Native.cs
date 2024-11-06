@@ -16,24 +16,24 @@ partial class Window
         var newPos = new Point(e->x, e->y);
         if (Location != newPos)
         {
-            OnMove(newPos);
+            UpdateLocation(newPos);
         }
         
         var newSize = new Size(e->width, e->height);
         if (Size != newSize)
         {
-            OnResize(newSize);
+            UpdateSize(newSize);
         }
     }
 
-    protected override void SetControlSize(Size size)
+    protected override void ApplyControlSize(Size size)
     {
         Application.EnsureConnection().Windows.Configure(_xcbWindow,
             ConfigureWindowValueMask.Width | ConfigureWindowValueMask.Height,
             [(uint)size.Width, (uint)size.Height]);
     }
 
-    protected override void SetControlLocation(Point location)
+    protected override void ApplyControlLocation(Point location)
     {
         Application.EnsureConnection().Windows.Configure(_xcbWindow,
             ConfigureWindowValueMask.X | ConfigureWindowValueMask.Y,
@@ -68,9 +68,9 @@ partial class Window
             text);
     }
 
-    protected override void OnResize(Size size)
+    protected override void UpdateSize(Size size)
     {
-        base.OnResize(size);
+        base.UpdateSize(size);
         _renderer.SetSize(size);
     }
 
