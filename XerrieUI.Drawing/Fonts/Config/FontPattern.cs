@@ -77,7 +77,7 @@ public class FontPattern : IDisposable, ICloneable
         var matchResult = FcPatternGetDouble(Handle, property, index, &result);
         if (matchResult != FontMatchResult.Match)
         {
-            throw FontConfigException.CreateFromGetPropertyResult(matchResult);
+            throw FontConfigException.CreateFromGetPropertyResult(matchResult, property);
         }
         
         return result;
@@ -89,7 +89,7 @@ public class FontPattern : IDisposable, ICloneable
         var matchResult = FcPatternGetInteger(Handle, property, index, &result);
         if (matchResult != FontMatchResult.Match)
         {
-            throw FontConfigException.CreateFromGetPropertyResult(matchResult);
+            throw FontConfigException.CreateFromGetPropertyResult(matchResult, property);
         }
         
         return result;

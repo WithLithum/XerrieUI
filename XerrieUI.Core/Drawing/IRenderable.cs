@@ -8,5 +8,5 @@ namespace XerrieUI.Core.Drawing;
 
 public interface IRenderable
 {
-    void RefreshArea(Rectangle area);
+    void Refresh();
 }

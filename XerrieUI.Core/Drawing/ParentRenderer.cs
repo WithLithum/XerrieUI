@@ -17,7 +17,7 @@ public abstract class ParentRenderer : ControlRenderer
         _parentControl = parentControl;
     }
 
-    public void Update(Rectangle rectangle)
+    public void Render(Rectangle rectangle)
     {
         foreach (var control in _parentControl.Children.Where(control => control.Updated))
         {

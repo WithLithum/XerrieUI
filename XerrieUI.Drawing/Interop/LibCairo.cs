@@ -4,6 +4,7 @@
 
 using System.Drawing;
 using System.Runtime.InteropServices;
+using XerrieUI.Drawing.Fonts;
 using XerrieUI.Native;
 
 namespace XerrieUI.Drawing.Interop;
@@ -56,6 +57,11 @@ internal static partial class LibCairo
     [LibraryImport(LibName)]
     internal static partial void cairo_set_font_face(IntPtr cairo,
         IntPtr fontFace);
+
+    [LibraryImport(LibName, StringMarshalling = StringMarshalling.Utf8)]
+    internal static partial void cairo_text_extents(IntPtr cairo,
+        string utf8,
+        ref TextExtents extents);
     
     [LibraryImport(LibName)]
     internal static partial void cairo_font_face_destroy(IntPtr fontFace);

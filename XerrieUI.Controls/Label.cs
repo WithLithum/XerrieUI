@@ -5,28 +5,61 @@
 using System.Drawing;
 using XerrieUI.Core.Drawing;
 using XerrieUI.Core.Forms.Controls;
+using XerrieUI.Drawing.Fonts;
 using XerrieUI.Drawing.Patterns;
 
 namespace XerrieUI.Controls;
 
 public class Label : AbstractControl
 {
+    private string? _lastText = "Label";
+    private TextExtents _extents;
+    private string _text = "Label";
+
     public Label()
     {
         BackgroundColor = Color.Transparent;
         ForegroundColor = Color.Black;
+        Text = "Label";
     }
 
     public string FontPattern { get; set; } = "sans-serif";
 
-    public string Text { get; set; } = "Label";
+    public string Text
+    {
+        get => _text;
+        set
+        {
+            _text = value;
+            Refresh();
+        }
+    }
+
+    public bool AutoSize { get; set; } = true;
     
     public override void Render(IRenderer renderer)
     {
         base.Render(renderer);
+        renderer.SetFont(FontPattern);
+
+        Console.WriteLine("Label Render");
+
+        if (Text != _lastText && renderer.CurrentFont != null)
+        {
+            Console.WriteLine("Calculating Extents");
+            _lastText = Text;
+            _extents = renderer.Graphics.GetTextExtents(renderer.CurrentFont, Text);
+            ApplyControlSize(new Size((int)Math.Ceiling(_extents.Width), 
+                (int)Math.Ceiling(_extents.Height)));
+        }
+
+        Console.WriteLine("Size: {0}", Size);
+        Console.WriteLine("Drawing Text");
         
         using var pattern = new SolidPattern(ForegroundColor);
-        renderer.SetFont(FontPattern);
         renderer.DrawText(pattern, Location, Text);
+
+        Console.WriteLine("Label Render Done");
     }
+    
 }

@@ -13,15 +13,16 @@ namespace XerrieUI.Core.Drawing;
 public abstract class ControlRenderer : IRenderer, IDisposable
 {
     private string? _cachedFontName;
-    private CairoFont? _cairoFont;
     private FoundFontInfo? _fontInfo;
+    
+    public CairoFont? CurrentFont { get; private set; }
     
     public abstract CairoContext Graphics { get; }
 
     public void SetFont(string fontPattern)
     {
         if (_cachedFontName == fontPattern
-            && _cairoFont != null)
+            && CurrentFont != null)
         {
             return;
         }
@@ -36,22 +37,22 @@ public abstract class ControlRenderer : IRenderer, IDisposable
 
         _cachedFontName = fontPattern;
         _fontInfo = fontInfo;
-        _cairoFont = new FreeTypeCairoFont(face);
+        CurrentFont = new FreeTypeCairoFont(face);
     }
     
     public void DrawText(CairoPattern pattern, Point point, string text)
     {
-        if (_cairoFont == null || _fontInfo == null)
+        if (CurrentFont == null || _fontInfo == null)
         {
             throw new InvalidOperationException("Cannot render text if font is null.");
         }
         
-        Graphics.FillText(pattern, _cairoFont, _fontInfo.Size, point, text);
+        Graphics.FillText(pattern, CurrentFont, _fontInfo.Size, point, text);
     }
 
     public virtual void Dispose()
     {
-        _cairoFont?.Dispose();
+        CurrentFont?.Dispose();
         GC.SuppressFinalize(this);
     }
 }

@@ -35,13 +35,13 @@ public class FontConfigException : Exception
         return new FontConfigException("Failed to remove property.");
     }
 
-    public static FontConfigException CreateFromGetPropertyResult(FontMatchResult result)
+    public static FontConfigException CreateFromGetPropertyResult(FontMatchResult result, string propertyName)
     {
         return result switch
         {
-            FontMatchResult.NoMatch => new FontConfigException("The specified property does not exist."),
-            FontMatchResult.TypeMismatch => new FontConfigException("The specified property exists but is of the wrong type."),
-            FontMatchResult.NoId => new FontConfigException("The specified property exists doesn't have the specified index."),
+            FontMatchResult.NoMatch => new FontConfigException($"The specified property '{propertyName}' does not exist."),
+            FontMatchResult.TypeMismatch => new FontConfigException($"The specified property '{propertyName}' exists but is of the wrong type."),
+            FontMatchResult.NoId => new FontConfigException($"The specified property '{propertyName}' exists but doesn't have the specified index."),
             FontMatchResult.OutOfMemory => new FontConfigException("Failed to allocate resources for the operation."),
             _ => new FontConfigException($"Unknown error occurred: {result}")
         };

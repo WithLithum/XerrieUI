@@ -10,6 +10,7 @@ namespace XerrieUI.Core.Drawing;
 
 public interface IRenderer
 {
+    CairoFont? CurrentFont { get; }
     CairoContext Graphics { get; }
     
     void DrawText(CairoPattern pattern, Point point, string text);

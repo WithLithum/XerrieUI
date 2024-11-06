@@ -2,6 +2,7 @@
 // 
 // SPDX-License-Identifier: Apache-2.0
 
+using System.Drawing;
 using XerrieUI.Core.Drawing;
 
 namespace XerrieUI.Core.Forms.Controls;
@@ -21,8 +22,20 @@ public abstract class AbstractParentControl : AbstractControl
         
         foreach (var child in Children)
         {
-            if (child.Updated) child.Render(renderer);
+            if (!child.Updated) child.Render(renderer);
         } 
+        
         renderer.Graphics.Flush();
+    }
+
+    protected void RefreshChildren(Rectangle rectangle)
+    {
+        foreach (var child in Children)
+        {
+            if (rectangle.IntersectsWith(child.Bounds))
+            {
+                child.Refresh();
+            }
+        }
     }
 }

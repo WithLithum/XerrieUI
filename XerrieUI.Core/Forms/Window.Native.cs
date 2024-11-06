@@ -73,12 +73,7 @@ partial class Window
         base.UpdateSize(size);
         _renderer.SetSize(size);
     }
-
-    public override void RefreshArea(Rectangle area)
-    {
-        Render(GetRenderer());
-    }
-
+    
     internal void OnShown()
     {
         Shown?.Invoke(this, EventArgs.Empty);
@@ -92,5 +87,11 @@ partial class Window
     public void OnTextChanged()
     {
         TextChanged?.Invoke(this, EventArgs.Empty);
+    }
+
+    internal void RefreshArea(Rectangle rectangle)
+    {
+        Refresh();
+        RefreshChildren(rectangle);
     }
 }

@@ -20,8 +20,8 @@ public abstract class AbstractControl : IRenderable
     public event EventHandler? Resized;
     
     #endregion
-    
-    public Rectangle Bounds { get; set; }
+
+    public Rectangle Bounds => new(Location, Size);
 
     public Color BackgroundColor { get; set; } = Color.White;
     public Color ForegroundColor { get; set; } = Color.Black;
@@ -53,9 +53,8 @@ public abstract class AbstractControl : IRenderable
         Updated = true;
     }
 
-    public virtual void RefreshArea(Rectangle area)
+    public virtual void Refresh()
     {
-        // TODO actually refresh any area
         Updated = false;
     }
 

@@ -3,7 +3,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 using System.Drawing;
+using System.Reflection.Metadata;
 using XerrieUI.Drawing.Exceptions;
+using XerrieUI.Drawing.Fonts;
 using XerrieUI.Drawing.Interop;
 using XerrieUI.Drawing.Patterns;
 
@@ -49,25 +51,42 @@ public class CairoContext : IDisposable, IEquatable<CairoContext>
     
     #endregion
 
-    public void FillText(CairoPattern pattern, CairoFont font, double size, Point point, string text)
+    public TextExtents GetTextExtents(CairoFont font, string text)
     {
+        TextExtents result = default;
+        LibCairo.cairo_text_extents(_handle, text, ref result);
+        EnsureSuccess();
+        return result;
+    }
+    
+    public void FillText(CairoPattern pattern, CairoFont font, double size, PointF point, string text)
+    {
+        Console.WriteLine("begin FillText");
         LibCairo.cairo_set_font_face(_handle, font.Handle);
-        
+        Console.WriteLine("fFace");
         EnsureSuccess();
         
         LibCairo.cairo_set_font_size(_handle, size);
-        
+        Console.WriteLine("fSize");
         EnsureSuccess();
         
         LibCairo.cairo_set_source(_handle, pattern.Handle);
+        Console.WriteLine("fSource");
+        EnsureSuccess();
         
         LibCairo.cairo_move_to(_handle, point.X, point.Y);
+        Console.WriteLine("fMoveTo");
+        EnsureSuccess();
+
+        Console.WriteLine(text);
         LibCairo.cairo_show_text(_handle, text);
+        Console.WriteLine("fShowText");
+        EnsureSuccess();
         
         // TODO extents
         
         LibCairo.cairo_fill(_handle);
-        
+        Console.WriteLine("fFill");
         EnsureSuccess();
     }
     

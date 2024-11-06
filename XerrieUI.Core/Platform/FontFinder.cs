@@ -18,6 +18,8 @@ public static class FontFinder
         
         using var config = FontConfig.Reference();
         using var fcPattern = FontPattern.Parse(pattern);
+        fcPattern.SetDefaultsIfAbsent();
+        fcPattern.SetMatchKind(MatchKind.FcMatchPattern);
         
         var matchResult = config.TryMatch(fcPattern, out var result);
         if (matchResult != FontMatchResult.Match || result == null)
