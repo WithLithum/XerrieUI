@@ -45,13 +45,19 @@ internal static class EventLoop
                 break;
             case XEventType.PropertyNotify:
                 var propArgs = (xcb_property_notify_event_t*)e;
-                // TODO implement this event
-                Console.WriteLine(" [PropertyNotify: {0} changed]",
-                    (PrimitiveAtoms)propArgs->atom);
+                ProcessPropertyNotify(propArgs);
                 break;
         }
         
         Marshal.FreeHGlobal((IntPtr)e);
+    }
+
+    private static unsafe void ProcessPropertyNotify(xcb_property_notify_event_t* propArgs)
+    {
+        var atom = propArgs->atom;
+        var window = propArgs->window;
+
+        Application.WindowManager.OnPropertyChange(window, atom);
     }
 
     private static unsafe void HandleClientMessage(XcbConnection connection, xcb_generic_event_t* e)

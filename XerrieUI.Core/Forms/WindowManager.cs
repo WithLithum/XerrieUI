@@ -4,6 +4,7 @@
 
 using System.Drawing;
 using XerrieUI.Native;
+using XerrieUI.Native.Windowing;
 
 namespace XerrieUI.Core.Forms;
 
@@ -77,5 +78,15 @@ internal class WindowManager
     public void OnHidden(uint windowId)
     {
         DoOnWindow(windowId, window => window.OnHidden());
+    }
+
+    public void OnPropertyChange(uint window, uint atom)
+    {
+        switch (atom)
+        {
+            case (uint)PrimitiveAtoms.WmName:
+                DoOnWindow(window, w => w.OnTextChanged());
+                break;
+        }
     }
 }

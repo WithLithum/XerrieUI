@@ -30,7 +30,13 @@ public partial class Window : AbstractParentControl, IDisposable, IRenderingPare
 
     public Window() : this(NativeWindows.CreateNativeWindow(DefaultSize), DefaultSize)
     {
-        SetText(GetType().Name);
+        Text = GetType().Name;
+    }
+
+    public string Text
+    {
+        get => GetText();
+        set => SetText(value);
     }
 
     public bool Disposed { get; private set; }
@@ -40,6 +46,8 @@ public partial class Window : AbstractParentControl, IDisposable, IRenderingPare
 
     public event EventHandler? Shown;
     public event EventHandler? Hidden;
+
+    public event EventHandler? TextChanged;
     
     public void Show()
     {

@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 using System.Runtime.InteropServices;
+using XerrieUI.Native.Exceptions;
 
 namespace XerrieUI.Native.Windowing;
 
@@ -15,6 +16,42 @@ public class XcbWindowing
         _connection = connection;
     }
 
+    public unsafe string GetStringProperty(XcbWindowHandle window,
+        uint propertyAtom)
+    {
+        var request = Xcb.xcb_get_property(_connection.Handle,
+            0,
+            window.Handle,
+            propertyAtom,
+            (uint)PrimitiveAtoms.String,
+            0,
+            128); // TODO find a better value for this one
+
+        xcb_generic_error_t error;
+        var errorPtr = &error;
+        
+        var reply = Xcb.xcb_get_property_reply(_connection.Handle,
+            request,
+            &errorPtr);
+
+        if (error.error_code != 0)
+        {
+            throw X11Exception.CreateFromError(error);
+        }
+        
+        if (reply == null)
+        {
+            return "<null>";
+        }
+
+        var length = Xcb.xcb_get_property_value_length(reply);
+        var valuePtr = Xcb.xcb_get_property_value(reply);
+        
+        var result = Marshal.PtrToStringUTF8((IntPtr)valuePtr, length);
+        Marshal.FreeHGlobal((IntPtr)reply);
+        return result;
+    }
+    
     public unsafe void ChangeProperty(XcbWindowHandle window,
         uint propertyAtom,
         string value,

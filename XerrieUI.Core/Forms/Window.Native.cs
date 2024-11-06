@@ -55,7 +55,13 @@ partial class Window
         Dispose();
     }
 
-    internal void SetText(string text)
+    private string GetText()
+    {
+        return Application.EnsureConnection().Windows.GetStringProperty(_xcbWindow,
+            (uint)PrimitiveAtoms.WmName);
+    }
+    
+    private void SetText(string text)
     {
         Application.EnsureConnection().Windows.ChangeProperty(_xcbWindow,
             (uint)PrimitiveAtoms.WmName,
@@ -81,5 +87,10 @@ partial class Window
     internal void OnHidden()
     {
         Hidden?.Invoke(this, EventArgs.Empty);
+    }
+
+    public void OnTextChanged()
+    {
+        TextChanged?.Invoke(this, EventArgs.Empty);
     }
 }
