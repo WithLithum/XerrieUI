@@ -47,9 +47,33 @@ internal static class EventLoop
                 var propArgs = (xcb_property_notify_event_t*)e;
                 ProcessPropertyNotify(propArgs);
                 break;
+            case XEventType.ButtonPress:
+                var btnPressArgs = (xcb_button_press_event_t*)e;
+                ProcessButtonPress(btnPressArgs, true);
+                break;
+            case XEventType.ButtonRelease:
+                var btnReleaseArgs = (xcb_button_press_event_t*)e;
+                ProcessButtonPress(btnReleaseArgs, false);
+                break;
         }
         
         Marshal.FreeHGlobal((IntPtr)e);
+    }
+
+    private static unsafe void ProcessButtonPress(xcb_button_press_event_t* btnPressArgs,
+        bool isPressOrRelease)
+    {
+        var window = btnPressArgs->@event;
+        if (window == 0)
+        {
+            return;
+        }
+
+        Application.WindowManager.OnButtonPress(window, 
+            (MouseButton)btnPressArgs->detail, 
+            btnPressArgs->event_x,
+            btnPressArgs->event_y,
+            isPressOrRelease);
     }
 
     private static unsafe void ProcessPropertyNotify(xcb_property_notify_event_t* propArgs)

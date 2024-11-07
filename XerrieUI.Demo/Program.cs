@@ -21,6 +21,14 @@ var label = new Label
 
 window.Children.Add(label);
 
-label.Refresh();
+window.MouseUp += (_, args) =>
+{
+    if (args.Button == MouseButton.Left)
+    {
+        label.Location = args.Location;
+    }
+};
+
+label.Refresh(false);
 
 Application.Run(window);

@@ -9,6 +9,8 @@ using XerrieUI.Drawing.Patterns;
 
 namespace XerrieUI.Core.Forms.Controls;
 
+public delegate void MouseButtonEventHandler(object sender, MouseButtonEventArgs e);
+
 public abstract class AbstractControl : IRenderable
 {
     private Point _location;
@@ -18,6 +20,8 @@ public abstract class AbstractControl : IRenderable
 
     public event EventHandler? Moved;
     public event EventHandler? Resized;
+    public event MouseButtonEventHandler? MouseDown;
+    public event MouseButtonEventHandler? MouseUp;
     
     #endregion
 
@@ -26,7 +30,7 @@ public abstract class AbstractControl : IRenderable
     public Color BackgroundColor { get; set; } = Color.White;
     public Color ForegroundColor { get; set; } = Color.Black;
     
-    public bool Updated { get; private set; }
+    public bool Updated { get; protected set; }
     
     public IRenderable? Parent { get; protected internal set; }
 
@@ -53,9 +57,18 @@ public abstract class AbstractControl : IRenderable
         Updated = true;
     }
 
-    public virtual void Refresh()
+    public virtual void Refresh(bool doNotPropagate)
     {
         Updated = false;
+        Parent?.Refresh(true);
+    }
+
+    public virtual void RefreshArea(Rectangle rectangle)
+    {
+        if (rectangle.IntersectsWith(Bounds))
+        {
+            Refresh(true);
+        }
     }
 
     /// <summary>
@@ -98,5 +111,16 @@ public abstract class AbstractControl : IRenderable
     {
         _location = location;
         Moved?.Invoke(this, EventArgs.Empty);
+        Refresh(true);
+    }
+
+    public virtual void OnMouseUp(Point location, MouseButton button)
+    {
+        MouseUp?.Invoke(this, new MouseButtonEventArgs(location, button));
+    }
+    
+    public virtual void OnMouseDown(Point location, MouseButton button)
+    {
+        MouseDown?.Invoke(this, new MouseButtonEventArgs(location, button));
     }
 }

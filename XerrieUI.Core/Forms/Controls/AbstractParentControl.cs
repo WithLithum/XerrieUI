@@ -28,14 +28,23 @@ public abstract class AbstractParentControl : AbstractControl
         renderer.Graphics.Flush();
     }
 
-    protected void RefreshChildren(Rectangle rectangle)
+    public override void Refresh(bool doNotPropagate)
+    {
+        Updated = false; // base refresh propagates this request
+        
+        if (doNotPropagate) return;
+        
+        foreach (var child in Children)
+        {
+            child.Refresh(doNotPropagate);
+        }
+    }
+
+    public override void RefreshArea(Rectangle rectangle)
     {
         foreach (var child in Children)
         {
-            if (rectangle.IntersectsWith(child.Bounds))
-            {
-                child.Refresh();
-            }
+            child.RefreshArea(rectangle);
         }
     }
 }

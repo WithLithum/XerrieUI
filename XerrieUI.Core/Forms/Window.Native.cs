@@ -89,9 +89,9 @@ partial class Window
         TextChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    internal void RefreshArea(Rectangle rectangle)
+    public override void RefreshArea(Rectangle rectangle)
     {
-        Refresh();
-        RefreshChildren(rectangle);
+        Refresh(false);
+        base.RefreshArea(rectangle);
     }
 }

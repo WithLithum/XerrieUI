@@ -89,4 +89,13 @@ internal class WindowManager
                 break;
         }
     }
+
+    public void OnButtonPress(uint window, MouseButton button, short x, short y, bool isPressOrRelease)
+    {
+        Action<Window> action = isPressOrRelease
+            ? w => w.OnMouseDown(new Point(x, y), button)
+            : w => w.OnMouseUp(new Point(x, y), button);
+        
+        DoOnWindow(window, action);
+    }
 }

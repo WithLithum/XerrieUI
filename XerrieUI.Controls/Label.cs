@@ -31,7 +31,7 @@ public class Label : AbstractControl
         set
         {
             _text = value;
-            Refresh();
+            Refresh(true);
         }
     }
 
@@ -42,24 +42,17 @@ public class Label : AbstractControl
         base.Render(renderer);
         renderer.SetFont(FontPattern);
 
-        Console.WriteLine("Label Render");
-
         if (Text != _lastText && renderer.CurrentFont != null)
         {
-            Console.WriteLine("Calculating Extents");
             _lastText = Text;
             _extents = renderer.Graphics.GetTextExtents(renderer.CurrentFont, Text);
             ApplyControlSize(new Size((int)Math.Ceiling(_extents.Width), 
                 (int)Math.Ceiling(_extents.Height)));
         }
 
-        Console.WriteLine("Size: {0}", Size);
-        Console.WriteLine("Drawing Text");
         
         using var pattern = new SolidPattern(ForegroundColor);
         renderer.DrawText(pattern, Location, Text);
-
-        Console.WriteLine("Label Render Done");
     }
     
 }
