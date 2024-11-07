@@ -35,4 +35,10 @@ public class FontFace : IDisposable
     }
     
     #endregion
+
+    public FontFace Reference()
+    {
+        LibFreeType.FT_Reference_Face(Handle);
+        return new FontFace(Handle);
+    }
 }

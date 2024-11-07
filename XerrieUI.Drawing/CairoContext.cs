@@ -15,6 +15,7 @@ public class CairoContext : IDisposable, IEquatable<CairoContext>
 {
     private readonly IntPtr _handle;
     private readonly CairoSurface? _target;
+    private bool _disposed;
     
     public CairoContext(CairoSurface target)
     {
@@ -37,6 +38,11 @@ public class CairoContext : IDisposable, IEquatable<CairoContext>
             throw new CairoException(status);
         }
     }
+
+    private void EnsureNotDisposed()
+    {
+        ObjectDisposedException.ThrowIf(_disposed, this);
+    }
     
     #endregion
 
@@ -47,6 +53,18 @@ public class CairoContext : IDisposable, IEquatable<CairoContext>
         LibCairo.cairo_push_group(_handle);
         action.Invoke();
         LibCairo.cairo_pop_group_to_source(_handle);
+    }
+    
+    #endregion
+    
+    #region Font Management
+
+    private void SetFontFace(CairoFont font)
+    {
+        font.EnsureNotDisposed();
+        EnsureNotDisposed();
+        LibCairo.cairo_set_font_face(_handle, font.Handle);
+        EnsureSuccess();
     }
     
     #endregion
@@ -61,32 +79,20 @@ public class CairoContext : IDisposable, IEquatable<CairoContext>
     
     public void FillText(CairoPattern pattern, CairoFont font, double size, PointF point, string text)
     {
-        Console.WriteLine("begin FillText");
-        LibCairo.cairo_set_font_face(_handle, font.Handle);
-        Console.WriteLine("fFace");
-        EnsureSuccess();
+        EnsureNotDisposed();
+        
+        SetFontFace(font);
         
         LibCairo.cairo_set_font_size(_handle, size);
-        Console.WriteLine("fSize");
-        EnsureSuccess();
-        
         LibCairo.cairo_set_source(_handle, pattern.Handle);
-        Console.WriteLine("fSource");
-        EnsureSuccess();
-        
         LibCairo.cairo_move_to(_handle, point.X, point.Y);
-        Console.WriteLine("fMoveTo");
-        EnsureSuccess();
-
-        Console.WriteLine(text);
+        
         LibCairo.cairo_show_text(_handle, text);
-        Console.WriteLine("fShowText");
         EnsureSuccess();
         
         // TODO extents
         
         LibCairo.cairo_fill(_handle);
-        Console.WriteLine("fFill");
         EnsureSuccess();
     }
     
@@ -112,6 +118,7 @@ public class CairoContext : IDisposable, IEquatable<CairoContext>
     private void ReleaseUnmanagedResources()
     {
         LibCairo.cairo_destroy(_handle);
+        _disposed = true;
     }
 
     private void Dispose(bool disposing)

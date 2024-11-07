@@ -24,4 +24,7 @@ internal static partial class LibFreeType
         string filePathName,
         long faceIndex,
         IntPtr* facePtr);
+
+    [LibraryImport(LibName)]
+    internal static partial FreeTypeError FT_Reference_Face(IntPtr face);
 }
