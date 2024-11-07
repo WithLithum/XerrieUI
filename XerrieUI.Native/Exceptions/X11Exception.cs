@@ -2,7 +2,9 @@
 // 
 // SPDX-License-Identifier: Apache-2.0
 
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using JetBrains.Annotations;
 
 namespace XerrieUI.Native.Exceptions;
 
@@ -26,7 +28,21 @@ public class X11Exception : Exception
             throw CreateFromError(error);
         }
     }
-
+    
+    /// <summary>
+    /// Throws <see cref="ArgumentException"/> if the specified error is a <see cref="XcbErrors.Window"/> error.
+    /// </summary>
+    /// <param name="error">The error to inspect.</param>
+    /// <param name="paramName">The parameter name.</param>
+    /// <exception cref="ArgumentException">The specified error is <see cref="XcbErrors.Window"/>.</exception>
+    public static void ExpectWindow(xcb_generic_error_t error, [InvokerParameterName] string paramName)
+    {
+        if (error.error_code == (uint)XcbErrors.Window)
+        {
+            throw new ArgumentException("The window ID does not refer to a valid window.", paramName);
+        }
+    }
+    
     public static unsafe X11Exception CreateFromError(xcb_generic_error_t error)
     {
         var name = XcbExtras.xcb_event_get_error_label(error.error_code);

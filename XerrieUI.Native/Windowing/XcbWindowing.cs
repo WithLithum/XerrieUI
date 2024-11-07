@@ -16,6 +16,111 @@ public class XcbWindowing
         _connection = connection;
     }
 
+    public unsafe XcbWindowAttributes GetAttributes(XcbWindowHandle window)
+    {
+        var cookie = Xcb.xcb_get_window_attributes(_connection.Handle, window.Handle);
+        
+        xcb_generic_error_t error;
+        var errorPtr = &error;
+
+        var reply = Xcb.xcb_get_window_attributes_reply(_connection.Handle,
+            cookie, &errorPtr);
+        if (error.error_code != 0 || reply == null)
+        {
+            throw X11Exception.CreateFromError(error);
+        }
+
+        var result = new XcbWindowAttributes(reply);
+        Marshal.FreeHGlobal((IntPtr)reply);
+        return result;
+    }
+
+    public unsafe XcbWindowHandle GetSelectionOwner(uint atom)
+    {
+        var request = Xcb.xcb_get_selection_owner(_connection.Handle,
+            atom);
+
+        xcb_generic_error_t error;
+        var errorPtr = &error;
+        var reply = Xcb.xcb_get_selection_owner_reply(_connection.Handle,
+            request,
+            &errorPtr);
+
+        if (error.error_code != 0 || reply == null)
+        {
+            if (error.error_code == (byte)XcbErrors.Atom)
+            {
+                throw new ArgumentException("The specified atom does not exist.", nameof(atom));
+            }
+            
+            throw X11Exception.CreateFromError(error);
+        }
+
+        var result = new XcbWindowHandle(reply->owner);
+        Marshal.FreeHGlobal((IntPtr)reply);
+        return result;
+    }
+    
+    public unsafe byte[] GetCustomProperty(XcbWindowHandle window,
+        uint typeAtom,
+        uint propertyAtom,
+        out uint realType,
+        int format = -1)
+    {
+        var request = Xcb.xcb_get_property(_connection.Handle,
+            0,
+            window.Handle,
+            propertyAtom,
+            (uint)PrimitiveAtoms.String,
+            0,
+            uint.MaxValue);
+
+        xcb_generic_error_t error;
+        var errorPtr = &error;
+        
+        var reply = Xcb.xcb_get_property_reply(_connection.Handle,
+            request,
+            &errorPtr);
+
+        if (error.error_code != 0)
+        {
+            throw X11Exception.CreateFromError(error);
+        }
+        
+        if (reply == null)
+        {
+            realType = 0;
+            return [];
+        }
+        
+        realType = reply->type;
+
+        // Verify format if needed.
+        if (format > 0 && reply->format != format)
+        {
+            throw new InvalidOperationException($"Caller requires format '{format}' but query returned format '{reply->format}'");
+        }
+
+        var length = Xcb.xcb_get_property_value_length(reply);
+        var valuePtr = Xcb.xcb_get_property_value(reply);
+
+        var result = new byte[length];
+        
+        // Copy data from the property_value to our array.
+        fixed (byte* pResult = result)
+        {
+            var arrayPtr = (byte*)valuePtr;
+            for (var i = 0; i < length; i++)
+            {
+                pResult[i] = arrayPtr[i];
+            }   
+        }
+        
+        // Free the reply data.
+        Marshal.FreeHGlobal((IntPtr)reply);
+        return result;
+    }
+    
     public unsafe string GetStringProperty(XcbWindowHandle window,
         uint propertyAtom)
     {
@@ -25,7 +130,7 @@ public class XcbWindowing
             propertyAtom,
             (uint)PrimitiveAtoms.String,
             0,
-            128); // TODO find a better value for this one
+            uint.MaxValue);
 
         xcb_generic_error_t error;
         var errorPtr = &error;
@@ -50,6 +155,19 @@ public class XcbWindowing
         var result = Marshal.PtrToStringUTF8((IntPtr)valuePtr, length);
         Marshal.FreeHGlobal((IntPtr)reply);
         return result;
+    }
+
+    public unsafe void ChangeAttribute(XcbWindowHandle window,
+        WindowAttributeMask attributes,
+        params uint[] values)
+    {
+        fixed (uint* valuesPtr = values)
+        {
+            _connection.RequestCheck(Xcb.xcb_change_window_attributes(_connection.Handle, 
+                window.Handle, 
+                (uint)attributes, 
+                valuesPtr));   
+        }
     }
     
     public unsafe void ChangeProperty(XcbWindowHandle window,
@@ -94,7 +212,7 @@ public class XcbWindowing
         ushort borderWidth,
         WindowClass windowClass,
         uint visual,
-        CreateWindowValueMask valueMask,
+        WindowAttributeMask attributeMask,
         uint[] values)
     {
         var id = _connection.GenerateId();
@@ -112,7 +230,7 @@ public class XcbWindowing
                 borderWidth,
                 (ushort)windowClass,
                 visual,
-                (uint)valueMask,
+                (uint)attributeMask,
                 dataP);
             _connection.RequestCheck(request);
         }
@@ -133,7 +251,7 @@ public class XcbWindowing
     {
         _connection.RequestCheck(Xcb.xcb_map_window_checked(_connection.Handle, handle.Handle));
     }
-    
+
     public void Unmap(XcbWindowHandle handle)
     {
         _connection.RequestCheck(Xcb.xcb_unmap_window_checked(_connection.Handle, handle.Handle));

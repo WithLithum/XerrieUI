@@ -5,7 +5,7 @@
 namespace XerrieUI.Native.Windowing;
 
 [Flags]
-public enum CreateWindowValueMask : uint
+public enum WindowAttributeMask : uint
 {
     None,
     BackPixmap = 1,

@@ -5,7 +5,6 @@
 using System.Reflection;
 using XerrieUI.Core.Exceptions;
 using XerrieUI.Core.Forms;
-using XerrieUI.Core.Platform;
 using XerrieUI.Core.Platform.Events;
 using XerrieUI.Drawing.Fonts;
 using XerrieUI.Drawing.Fonts.Config;
@@ -21,7 +20,7 @@ public static class Application
     private static XcbConnection? Connection { get; set; }
 
     internal static FontManager FontManager { get; } = new();
-
+    
     internal static XcbConnection EnsureConnection()
     {
         return Connection ?? throw new InvalidOperationException("Application is not yet initialized.");

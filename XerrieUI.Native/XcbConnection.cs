@@ -2,8 +2,11 @@
 // 
 // SPDX-License-Identifier: Apache-2.0
 
+using System.Runtime.InteropServices;
+using JetBrains.Annotations;
 using XerrieUI.Native.Exceptions;
 using XerrieUI.Native.Extensions;
+using XerrieUI.Native.Extensions.RAndR;
 using XerrieUI.Native.Interop;
 using XerrieUI.Native.Windowing;
 
@@ -17,6 +20,7 @@ public sealed class XcbConnection : IDisposable
 
         InterClient = new XcbInterClient(this);
         Intern = new XcbIntern(this);
+        RandR = new XcbRAndR(this);
         Setup = new XcbSetup(Xcb.xcb_get_setup(handle));
         Windows = new XcbWindowing(this);
 
@@ -31,6 +35,8 @@ public sealed class XcbConnection : IDisposable
     
     public XcbIntern Intern { get; }
     
+    public XcbRAndR RandR { get; }
+    
     public XcbSetup Setup { get; }
     
     public XcbWindowing Windows { get; }
@@ -40,6 +46,7 @@ public sealed class XcbConnection : IDisposable
         return Xcb.xcb_generate_id(Handle);
     }
 
+    [MustDisposeResource]
     public UnGrabToken Grab()
     {
         Xcb.xcb_grab_server(Handle);
@@ -116,5 +123,10 @@ public sealed class XcbConnection : IDisposable
     ~XcbConnection()
     {
         ReleaseUnmanagedResources();
+    }
+
+    public bool Flush()
+    {
+        return Xcb.xcb_flush(Handle) > 0;
     }
 }   

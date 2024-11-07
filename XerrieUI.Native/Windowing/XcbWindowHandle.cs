@@ -15,4 +15,6 @@ public readonly record struct XcbWindowHandle
     }
     
     public required uint Handle { get; init; }
+    
+    public static readonly XcbWindowHandle None = new(0);
 }

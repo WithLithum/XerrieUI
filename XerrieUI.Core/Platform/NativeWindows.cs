@@ -23,7 +23,7 @@ internal static class NativeWindows
         
         var id = connection.GenerateId();
 
-        const CreateWindowValueMask valueMask = CreateWindowValueMask.EventMask;
+        const WindowAttributeMask valueMask = WindowAttributeMask.EventMask;
         const WindowEventMask eventMask = WindowEventMask.Exposure |
                                           WindowEventMask.ButtonPress |
                                           WindowEventMask.ButtonRelease |
