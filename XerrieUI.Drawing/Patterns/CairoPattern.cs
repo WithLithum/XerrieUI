@@ -8,16 +8,23 @@ namespace XerrieUI.Drawing.Patterns;
 
 public abstract class CairoPattern : IDisposable
 {
+    private bool _disposed;
+    
     protected CairoPattern(IntPtr handle)
     {
         Handle = handle;
     }
     
     protected internal IntPtr Handle { get; }
-
+    public void EnsureNotDisposed()
+    {
+        ObjectDisposedException.ThrowIf(_disposed, this);
+    }
+    
     private void ReleaseUnmanagedResources()
     {
         LibCairo.cairo_pattern_destroy(Handle);
+        _disposed = true;
     }
 
     public void Dispose()

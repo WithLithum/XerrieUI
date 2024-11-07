@@ -3,7 +3,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 using System.Drawing;
-using System.Reflection.Metadata;
 using XerrieUI.Drawing.Exceptions;
 using XerrieUI.Drawing.Fonts;
 using XerrieUI.Drawing.Interop;
@@ -57,21 +56,67 @@ public class CairoContext : IDisposable, IEquatable<CairoContext>
     
     #endregion
     
-    #region Font Management
-
+    #region Resource Caching
+    
+    private CairoPattern? _currentSource;
+    private CairoFont? _currentFont;
+    private Pen? _currentPen;
+    
     private void SetFontFace(CairoFont font)
     {
         font.EnsureNotDisposed();
         EnsureNotDisposed();
+        
+        if (ReferenceEquals(_currentFont, font))
+        {
+            return;
+        }
+        
         LibCairo.cairo_set_font_face(_handle, font.Handle);
+        _currentFont = font;
         EnsureSuccess();
+    }
+    
+    private void SetSource(CairoPattern pattern)
+    {
+        pattern.EnsureNotDisposed();
+        EnsureNotDisposed();
+
+        if (ReferenceEquals(_currentSource, pattern))
+        {
+            // We don't have to call set_source which saves us doing P/Invoke again
+            return;
+        }
+        
+        LibCairo.cairo_set_source(_handle, pattern.Handle);
+        _currentSource = pattern;
+        EnsureSuccess();
+    }
+
+    private void SetPen(Pen pen)
+    {
+        EnsureNotDisposed();
+        pen.Pattern.EnsureNotDisposed();
+
+        if (ReferenceEquals(_currentPen, pen))
+        {
+            return;
+        }
+        
+        SetSource(pen.Pattern);
+        LibCairo.cairo_set_line_width(_handle, pen.Width);
+        _currentPen = pen;
     }
     
     #endregion
 
     public TextExtents GetTextExtents(CairoFont font, string text)
     {
+        EnsureNotDisposed();
+        
         TextExtents result = default;
+        SetFontFace(font);
+        
         LibCairo.cairo_text_extents(_handle, text, ref result);
         EnsureSuccess();
         return result;
@@ -84,7 +129,7 @@ public class CairoContext : IDisposable, IEquatable<CairoContext>
         SetFontFace(font);
         
         LibCairo.cairo_set_font_size(_handle, size);
-        LibCairo.cairo_set_source(_handle, pattern.Handle);
+        SetSource(pattern);
         LibCairo.cairo_move_to(_handle, point.X, point.Y);
         
         LibCairo.cairo_show_text(_handle, text);
@@ -98,7 +143,8 @@ public class CairoContext : IDisposable, IEquatable<CairoContext>
     
     public void FillRectangle(CairoPattern pattern, RectangleF rect)
     {
-        LibCairo.cairo_set_source(_handle, pattern.Handle);
+        EnsureNotDisposed();
+        SetSource(pattern);
         LibCairo.cairo_rectangle(_handle, rect.X, rect.Y, rect.Width, rect.Height);
         LibCairo.cairo_fill(_handle);
         EnsureSuccess();
@@ -106,8 +152,8 @@ public class CairoContext : IDisposable, IEquatable<CairoContext>
     
     public void DrawRectangle(Pen pen, RectangleF rect)
     {
-        LibCairo.cairo_set_line_width(_handle, pen.Width);
-        LibCairo.cairo_set_source(_handle, pen.Pattern.Handle);
+        EnsureNotDisposed();
+        SetPen(pen);
 
         LibCairo.cairo_rectangle(_handle, rect.X, rect.Y, rect.Width, rect.Height);
         LibCairo.cairo_stroke(_handle);

@@ -40,6 +40,12 @@ public sealed class XcbConnection : IDisposable
         return Xcb.xcb_generate_id(Handle);
     }
 
+    public UnGrabToken Grab()
+    {
+        Xcb.xcb_grab_server(Handle);
+        return new UnGrabToken(this);
+    }
+
     public unsafe xcb_screen_t* GetScreen(int screen)
     {
         var result = XUtilInterop.xcb_aux_get_screen(Handle, screen);
