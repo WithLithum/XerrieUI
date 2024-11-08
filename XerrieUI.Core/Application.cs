@@ -54,7 +54,7 @@ public static class Application
         }
     }
 
-    public static void Run(Window window)
+    public static void Run(CoreWindow window)
     {
         window.Show();
         

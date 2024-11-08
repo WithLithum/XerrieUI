@@ -12,14 +12,14 @@ using XerrieUI.Native.Windowing;
 
 namespace XerrieUI.Core.Forms;
 
-public partial class Window : AbstractParentControl, IDisposable, IRenderingParent
+public partial class CoreWindow : AbstractParentControl, IDisposable, IRenderingParent
 {
     private static readonly Size DefaultSize = new(500, 350);
     
     private readonly XcbWindowHandle _xcbWindow;
     private readonly WindowRenderer _renderer;
     
-    private Window(XcbWindowHandle xcbWindow, Size size)
+    private CoreWindow(XcbWindowHandle xcbWindow, Size size)
     {
         _xcbWindow = xcbWindow;
         _renderer = new WindowRenderer(this, XcbCairoSurface.Create(Application.EnsureConnection(),
@@ -32,7 +32,7 @@ public partial class Window : AbstractParentControl, IDisposable, IRenderingPare
         Application.WindowManager.Map(_xcbWindow.Handle, this);
     }
 
-    public Window() : this(NativeWindows.CreateNativeWindow(DefaultSize), DefaultSize)
+    public CoreWindow() : this(NativeWindows.CreateNativeWindow(DefaultSize), DefaultSize)
     {
         Text = GetType().Name;
     }

@@ -12,7 +12,7 @@ internal class WindowRenderer : ParentRenderer
 {
     private readonly XcbCairoSurface _surface;
 
-    public WindowRenderer(Window window, XcbCairoSurface surface) : base(window)
+    public WindowRenderer(CoreWindow coreWindow, XcbCairoSurface surface) : base(coreWindow)
     {
         _surface = surface;
         Graphics = new CairoContext(surface);

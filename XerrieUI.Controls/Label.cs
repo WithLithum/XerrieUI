@@ -10,20 +10,24 @@ using XerrieUI.Drawing.Patterns;
 
 namespace XerrieUI.Controls;
 
-public class Label : AbstractControl
+public class Label : UiControl
 {
     private string? _lastText = "Label";
     private TextExtents _extents;
     private string _text = "Label";
 
+    private string? _fontPattern;
+
     public Label()
     {
-        BackgroundColor = Color.Transparent;
-        ForegroundColor = Color.Black;
         Text = "Label";
     }
 
-    public string FontPattern { get; set; } = "sans-serif";
+    public string FontPattern
+    {
+        get => _fontPattern ?? Theme.FontPattern;
+        set => _fontPattern = value;
+    }
 
     public string Text
     {
@@ -34,6 +38,8 @@ public class Label : AbstractControl
             Refresh(true);
         }
     }
+
+    public override Color BackgroundColor { get; set; } = Color.Transparent;
 
     public bool AutoSize { get; set; } = true;
     

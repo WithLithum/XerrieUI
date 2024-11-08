@@ -10,11 +10,11 @@ namespace XerrieUI.Core.Forms;
 
 internal class WindowManager
 {
-    private readonly Dictionary<uint, Window> _windows = [];
+    private readonly Dictionary<uint, CoreWindow> _windows = [];
 
-    public void Map(uint windowId, Window window)
+    public void Map(uint windowId, CoreWindow coreWindow)
     {
-        _windows[windowId] = window;
+        _windows[windowId] = coreWindow;
     }
 
     public void Unmap(uint windowId)
@@ -64,7 +64,7 @@ internal class WindowManager
         DoOnWindow(windowId, window => window.OnShown());
     }
 
-    private void DoOnWindow(uint windowId, Action<Window> action)
+    private void DoOnWindow(uint windowId, Action<CoreWindow> action)
     {
         if (!_windows.TryGetValue(windowId, out var window))
         {
@@ -92,7 +92,7 @@ internal class WindowManager
 
     public void OnButtonPress(uint window, MouseButton button, short x, short y, bool isPressOrRelease)
     {
-        Action<Window> action = isPressOrRelease
+        Action<CoreWindow> action = isPressOrRelease
             ? w => w.OnMouseDownDevice(x, y, button)
             : w => w.OnMouseUpDevice(x, y, button);
         

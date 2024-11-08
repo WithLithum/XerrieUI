@@ -10,7 +10,7 @@ using XerrieUI.Native.Windowing;
 
 namespace XerrieUI.Core.Forms;
 
-partial class Window
+partial class CoreWindow
 {
     internal unsafe void OnConfigureNotify(xcb_configure_notify_event_t* e)
     {

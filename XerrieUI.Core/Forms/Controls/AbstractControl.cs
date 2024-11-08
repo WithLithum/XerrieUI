@@ -27,8 +27,8 @@ public abstract class AbstractControl : IRenderable
 
     public Rectangle Bounds => new(Location, Size);
 
-    public Color BackgroundColor { get; set; } = Color.White;
-    public Color ForegroundColor { get; set; } = Color.Black;
+    public virtual Color BackgroundColor { get; set; } = Color.White;
+    public virtual Color ForegroundColor { get; set; } = Color.Black;
     
     public bool Updated { get; protected set; }
     
