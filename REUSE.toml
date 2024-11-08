@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2024 WithLithum <WithLithum@outlook.com>
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: LGPL-3.0-or-later
 
 version = 1
 
@@ -8,19 +8,19 @@ version = 1
 [[annotations]]
 path = "**/bin/**/*"
 SPDX-FileCopyrightText = "2024 WithLithum <WithLithum@outlook.com>"
-SPDX-License-Identifier = "Apache-2.0"
+SPDX-License-Identifier = "LGPL-3.0-or-later OR GPL-3.0-or-later"
 
 [[annotations]]
 path = "**/obj/**/*"
 SPDX-FileCopyrightText = "2024 WithLithum <WithLithum@outlook.com>"
-SPDX-License-Identifier = "Apache-2.0"
+SPDX-License-Identifier = "LGPL-3.0-or-later OR GPL-3.0-or-later"
 
 # Solution files
 
 [[annotations]]
 path = "**/*.sln"
 SPDX-FileCopyrightText = "2024 WithLithum <WithLithum@outlook.com>"
-SPDX-License-Identifier = "Apache-2.0"
+SPDX-License-Identifier = "LGPL-3.0-or-later OR GPL-3.0-or-later"
 
 # RSP files
 
@@ -34,16 +34,16 @@ SPDX-License-Identifier = "Apache-2.0"
 [[annotations]]
 path = ".idea/**/*"
 SPDX-FileCopyrightText = "2024 WithLithum <WithLithum@outlook.com>"
-SPDX-License-Identifier = "Apache-2.0"
+SPDX-License-Identifier = "LGPL-3.0-or-later"
 
 # DotSettings files
 
 [[annotations]]
 path = "XerrieUI.sln.DotSettings"
 SPDX-FileCopyrightText = "2024 WithLithum <WithLithum@outlook.com>"
-SPDX-License-Identifier = "Apache-2.0"
+SPDX-License-Identifier = "LGPL-3.0-or-later"
 
 [[annotations]]
 path = "XerrieUI.sln.DotSettings.user"
 SPDX-FileCopyrightText = "2024 WithLithum <WithLithum@outlook.com>"
-SPDX-License-Identifier = "Apache-2.0"
+SPDX-License-Identifier = "LGPL-3.0-or-later"
