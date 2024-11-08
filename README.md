@@ -21,6 +21,6 @@ A demo app is included in the form of `XerrieUI.Demo` project.
 
 ## License
 
-[Apache-2.0](LICENSE)
+[LGPL-3.0-or-later](COPYING.LESSER) (see [GPL-3.0](COPYING))
 
 Also see [Third Party Notices](THIRD_PARTY_NOTICES.md).
