@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: 2024 WithLithum <WithLithum@outlook.com>
 // 
-// SPDX-License-Identifier: Apache-2.0
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
 using System.Drawing;
 using XerrieUI.Core.Drawing;
@@ -45,6 +45,45 @@ public abstract class AbstractParentControl : AbstractControl
         foreach (var child in Children)
         {
             child.RefreshArea(rectangle);
+        }
+    }
+
+    protected internal override void OnMouseWheel(Point location, MouseButton button)
+    {
+        base.OnMouseWheel(location, button);
+        
+        foreach (var child in Children)
+        {
+            if (child.Bounds.Contains(location))
+            {
+                child.OnMouseWheel(location, button);
+            }
+        }
+    }
+
+    protected internal override void OnMouseUp(Point location, MouseButton button)
+    {
+        base.OnMouseUp(location, button);
+        
+        foreach (var child in Children)
+        {
+            if (child.Bounds.Contains(location))
+            {
+                child.OnMouseUp(location, button);
+            }
+        }
+    }
+
+    protected internal override void OnMouseDown(Point location, MouseButton button)
+    {
+        base.OnMouseDown(location, button);
+        
+        foreach (var child in Children)
+        {
+            if (child.Bounds.Contains(location))
+            {
+                child.OnMouseDown(location, button);
+            }
         }
     }
 }

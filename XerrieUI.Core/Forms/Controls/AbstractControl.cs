@@ -115,17 +115,17 @@ public abstract class AbstractControl : IRenderable
         Refresh(true);
     }
 
-    protected virtual void OnMouseUp(Point location, MouseButton button)
+    protected internal virtual void OnMouseUp(Point location, MouseButton button)
     {
         MouseUp?.Invoke(this, new MouseButtonEventArgs(location, button));
     }
     
-    protected virtual void OnMouseDown(Point location, MouseButton button)
+    protected internal virtual void OnMouseDown(Point location, MouseButton button)
     {
         MouseDown?.Invoke(this, new MouseButtonEventArgs(location, button));
     }
 
-    protected virtual void OnMouseWheel(Point location, MouseButton button)
+    protected internal virtual void OnMouseWheel(Point location, MouseButton button)
     {
         MouseWheel?.Invoke(this, new MouseButtonEventArgs(location, button));
     }
