@@ -1,8 +1,7 @@
 // SPDX-FileCopyrightText: 2024 WithLithum <WithLithum@outlook.com>
 // 
-// SPDX-License-Identifier: Apache-2.0
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
-using System.Drawing;
 using XerrieUI.Core.Platform;
 using XerrieUI.Drawing;
 using XerrieUI.Drawing.Fonts;
@@ -41,7 +40,7 @@ public abstract class ControlRenderer : IRenderer, IDisposable
         CurrentFont = new FreeTypeCairoFont(face);
     }
     
-    public void DrawText(CairoPattern pattern, PointD point, string text)
+    public void DrawText(CairoPattern pattern, PointD point, string text, bool correctBounds = false)
     {
         if (CurrentFont == null || _fontInfo == null)
         {

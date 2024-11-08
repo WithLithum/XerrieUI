@@ -1,11 +1,12 @@
 ﻿// SPDX-FileCopyrightText: 2024 WithLithum <WithLithum@outlook.com>
 //
-// SPDX-License-Identifier: Apache-2.0
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
 using System.Drawing;
 using XerrieUI.Core.Drawing;
 using XerrieUI.Core.Forms.Controls;
 using XerrieUI.Drawing.Fonts;
+using XerrieUI.Drawing.Math;
 using XerrieUI.Drawing.Patterns;
 
 namespace XerrieUI.Controls;
@@ -56,9 +57,11 @@ public class Label : UiControl
                 (int)Math.Ceiling(_extents.Height)));
         }
 
+        var targetX = Location.X - _extents.XBearing;
+        var targetY = Location.Y - _extents.YBearing;
         
         using var pattern = new SolidPattern(ForegroundColor);
-        renderer.DrawText(pattern, Location, Text);
+        renderer.DrawText(pattern, new PointD(targetX, targetY), Text);
     }
     
 }

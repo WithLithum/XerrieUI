@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: 2024 WithLithum <WithLithum@outlook.com>
 // 
-// SPDX-License-Identifier: Apache-2.0
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
 using System.Drawing;
 using XerrieUI.Drawing;
@@ -14,6 +14,6 @@ public interface IRenderer
     CairoFont? CurrentFont { get; }
     CairoContext Graphics { get; }
     
-    void DrawText(CairoPattern pattern, PointD point, string text);
+    void DrawText(CairoPattern pattern, PointD point, string text, bool correctBounds = false);
     void SetFont(string pattern);
 }
