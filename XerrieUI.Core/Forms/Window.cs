@@ -25,6 +25,10 @@ public partial class Window : AbstractParentControl, IDisposable, IRenderingPare
         _renderer = new WindowRenderer(this, XcbCairoSurface.Create(Application.EnsureConnection(),
             _xcbWindow,
             size));
+
+        var scale = Application.GetAppScale();
+        _renderer.Graphics.SetScale(scale, scale);
+        
         Application.WindowManager.Map(_xcbWindow.Handle, this);
     }
 

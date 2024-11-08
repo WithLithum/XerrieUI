@@ -27,6 +27,18 @@ public static class Application
         return Connection ?? throw new InvalidOperationException("Application is not yet initialized.");
     }
 
+    internal static double GetAppScale()
+    {
+        const string envVarName = "XERRIE_UI_SCALE";
+        var envValue = Environment.GetEnvironmentVariable(envVarName);
+        if (envValue != null && double.TryParse(envValue, out var envScale))
+        {
+            return envScale;
+        }
+        
+        return 1.0;
+    }
+
     internal static WindowManager WindowManager { get; } = new();
 
     public static void Initialize()

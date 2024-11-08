@@ -4,7 +4,6 @@
 
 using System.Runtime.InteropServices;
 using XerrieUI.Native;
-using XerrieUI.Native.Windowing;
 
 namespace XerrieUI.Core.Platform.Events;
 
