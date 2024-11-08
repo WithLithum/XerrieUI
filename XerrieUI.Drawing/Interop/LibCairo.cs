@@ -107,6 +107,33 @@ internal static partial class LibCairo
     
     #endregion
     
+    #region Transformation
+
+    [LibraryImport(LibName)]
+    internal static partial void cairo_scale(IntPtr cr, double sx, double sy);
+
+    [LibraryImport(LibName)]
+    internal static partial void cairo_device_to_user(IntPtr cr,
+        ref double x,
+        ref double y);
+
+    [LibraryImport(LibName)]
+    internal static partial void cairo_user_to_device(IntPtr cr,
+        ref double x,
+        ref double y);
+    
+    [LibraryImport(LibName)]
+    internal static partial void cairo_device_to_user_distance(IntPtr cr,
+        ref double x,
+        ref double y);
+
+    [LibraryImport(LibName)]
+    internal static partial void cairo_user_to_device_distance(IntPtr cr,
+        ref double x,
+        ref double y);
+    
+    #endregion
+    
     #region Patterns
 
     [LibraryImport(LibName)]

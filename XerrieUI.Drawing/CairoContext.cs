@@ -3,9 +3,11 @@
 // SPDX-License-Identifier: Apache-2.0
 
 using System.Drawing;
+using System.Reflection.Metadata;
 using XerrieUI.Drawing.Exceptions;
 using XerrieUI.Drawing.Fonts;
 using XerrieUI.Drawing.Interop;
+using XerrieUI.Drawing.Math;
 using XerrieUI.Drawing.Patterns;
 
 namespace XerrieUI.Drawing;
@@ -109,6 +111,73 @@ public class CairoContext : IDisposable, IEquatable<CairoContext>
     }
     
     #endregion
+    
+    #region Transformation
+
+    /// <summary>
+    /// Modifies the current transformation matrix (CTM) by scaling the X and Y user-space axes
+    /// by <paramref name="sx"/> and <paramref name="sy"/> respectively. The scaling of the axes
+    /// takes place after any existing transformation of user space.
+    /// </summary>
+    /// <param name="sx">The X scale factor.</param>
+    /// <param name="sy">The Y scale factor</param>
+    public void SetScale(double sx, double sy)
+    {
+        EnsureNotDisposed();
+        LibCairo.cairo_scale(_handle, sx, sy);
+        EnsureSuccess();
+    }
+    
+    /// <summary>
+    /// Transform a coordinate from device space to user space by multiplying
+    /// the given point by the inverse of the current transformation matrix (CTM).
+    /// </summary>
+    /// <param name="from">The device coordinate to transform.</param>
+    /// <returns>The user coordinates.</returns>
+    public RectangleD DeviceToUser(RectangleD from)
+    {
+        var x = from.X;
+        var y = from.Y;
+        var width = from.Width;
+        var height = from.Height;
+        
+        LibCairo.cairo_device_to_user(_handle, ref x, ref y);
+        LibCairo.cairo_device_to_user_distance(_handle, ref width, ref height);
+        
+        return new RectangleD(x, y, width, height);
+    }
+    
+    /// <summary>
+    /// Transform a coordinate from device space to user space by multiplying
+    /// the given point by the inverse of the current transformation matrix (CTM).
+    /// </summary>
+    /// <param name="from">The device coordinate to transform.</param>
+    /// <returns>The user coordinates.</returns>
+    public PointD DeviceToUser(PointD from)
+    {
+        var x = from.X;
+        var y = from.Y;
+        
+        LibCairo.cairo_device_to_user(_handle, ref x, ref y);
+        return new PointD(x, y);
+    }
+
+    /// <summary>
+    /// Transform a coordinate from user space to device space by multiplying
+    /// the given point by the current transformation matrix (CTM).
+    /// </summary>
+    /// <param name="from">The user coordinates to transform.</param>
+    /// <returns>The user coordinates.</returns>
+    public PointD UserToDevice(PointD from)
+    {
+        var x = from.X;
+        var y = from.Y;
+
+        LibCairo.cairo_user_to_device(_handle, ref x, ref y);
+        return new PointD(x, y);
+    }
+    
+    #endregion
 
     public TextExtents GetTextExtents(CairoFont font, string text)
     {
@@ -122,7 +191,7 @@ public class CairoContext : IDisposable, IEquatable<CairoContext>
         return result;
     }
     
-    public void FillText(CairoPattern pattern, CairoFont font, double size, PointF point, string text)
+    public void FillText(CairoPattern pattern, CairoFont font, double size, PointD point, string text)
     {
         EnsureNotDisposed();
         

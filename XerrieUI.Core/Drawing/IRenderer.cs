@@ -4,6 +4,7 @@
 
 using System.Drawing;
 using XerrieUI.Drawing;
+using XerrieUI.Drawing.Math;
 using XerrieUI.Drawing.Patterns;
 
 namespace XerrieUI.Core.Drawing;
@@ -13,6 +14,6 @@ public interface IRenderer
     CairoFont? CurrentFont { get; }
     CairoContext Graphics { get; }
     
-    void DrawText(CairoPattern pattern, Point point, string text);
+    void DrawText(CairoPattern pattern, PointD point, string text);
     void SetFont(string pattern);
 }

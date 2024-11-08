@@ -31,7 +31,7 @@ internal class WindowManager
         }
         
         var rectangle = new Rectangle(e->x, e->y, e->width, e->height);
-        window.RefreshArea(rectangle);
+        window.RefreshAreaDevice(rectangle);
     }
 
     public unsafe void OnConfigureNotify(xcb_configure_notify_event_t* e)
@@ -93,8 +93,8 @@ internal class WindowManager
     public void OnButtonPress(uint window, MouseButton button, short x, short y, bool isPressOrRelease)
     {
         Action<Window> action = isPressOrRelease
-            ? w => w.OnMouseDown(new Point(x, y), button)
-            : w => w.OnMouseUp(new Point(x, y), button);
+            ? w => w.OnMouseDownDevice(x, y, button)
+            : w => w.OnMouseUpDevice(x, y, button);
         
         DoOnWindow(window, action);
     }

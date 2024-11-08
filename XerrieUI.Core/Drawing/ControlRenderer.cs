@@ -6,6 +6,7 @@ using System.Drawing;
 using XerrieUI.Core.Platform;
 using XerrieUI.Drawing;
 using XerrieUI.Drawing.Fonts;
+using XerrieUI.Drawing.Math;
 using XerrieUI.Drawing.Patterns;
 
 namespace XerrieUI.Core.Drawing;
@@ -40,7 +41,7 @@ public abstract class ControlRenderer : IRenderer, IDisposable
         CurrentFont = new FreeTypeCairoFont(face);
     }
     
-    public void DrawText(CairoPattern pattern, Point point, string text)
+    public void DrawText(CairoPattern pattern, PointD point, string text)
     {
         if (CurrentFont == null || _fontInfo == null)
         {

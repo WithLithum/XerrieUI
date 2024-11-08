@@ -4,6 +4,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using XerrieUI.Drawing.Math;
 using XerrieUI.Native;
 using XerrieUI.Native.Windowing;
 
@@ -94,4 +95,30 @@ partial class Window
         Refresh(false);
         base.RefreshArea(rectangle);
     }
+
+    #region Device coordinate event utils
+    
+    internal void OnMouseDownDevice(short x, short y, MouseButton button)
+    {
+        OnMouseDown(ToUserPoint(x, y),
+            button);
+    }
+
+    private Point ToUserPoint(short x, short y)
+    {
+        return _renderer.Graphics.DeviceToUser(new PointD(x, y)).ToPoint();
+    }
+
+    internal void OnMouseUpDevice(short x, short y, MouseButton button)
+    {
+        OnMouseUp(ToUserPoint(x, y),
+            button);
+    }
+    
+    public void RefreshAreaDevice(Rectangle rectangle)
+    {
+        RefreshArea(_renderer.Graphics.DeviceToUser(rectangle).ToRectangle());
+    }
+    
+    #endregion
 }
