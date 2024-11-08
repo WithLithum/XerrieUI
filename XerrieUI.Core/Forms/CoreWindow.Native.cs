@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: 2024 WithLithum <WithLithum@outlook.com>
 // 
-// SPDX-License-Identifier: Apache-2.0
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
 using System.ComponentModel;
 using System.Drawing;
@@ -100,6 +100,11 @@ partial class CoreWindow
     
     internal void OnMouseDownDevice(short x, short y, MouseButton button)
     {
+        if (button is MouseButton.RollUp or MouseButton.RollDown)
+        {
+            return;
+        }
+        
         OnMouseDown(ToUserPoint(x, y),
             button);
     }
@@ -111,6 +116,12 @@ partial class CoreWindow
 
     internal void OnMouseUpDevice(short x, short y, MouseButton button)
     {
+        if (button is MouseButton.RollUp or MouseButton.RollDown)
+        {
+            OnMouseWheel(ToUserPoint(x, y), button);
+            return;
+        }
+        
         OnMouseUp(ToUserPoint(x, y),
             button);
     }

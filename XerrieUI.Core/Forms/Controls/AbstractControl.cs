@@ -1,6 +1,6 @@
 // SPDX-FileCopyrightText: 2024 WithLithum <WithLithum@outlook.com>
 // 
-// SPDX-License-Identifier: Apache-2.0
+// SPDX-License-Identifier: LGPL-3.0-or-later
 
 using System.Drawing;
 using XerrieUI.Core.Drawing;
@@ -22,6 +22,7 @@ public abstract class AbstractControl : IRenderable
     public event EventHandler? Resized;
     public event MouseButtonEventHandler? MouseDown;
     public event MouseButtonEventHandler? MouseUp;
+    public event MouseButtonEventHandler? MouseWheel;
     
     #endregion
 
@@ -114,13 +115,18 @@ public abstract class AbstractControl : IRenderable
         Refresh(true);
     }
 
-    public virtual void OnMouseUp(Point location, MouseButton button)
+    protected virtual void OnMouseUp(Point location, MouseButton button)
     {
         MouseUp?.Invoke(this, new MouseButtonEventArgs(location, button));
     }
     
-    public virtual void OnMouseDown(Point location, MouseButton button)
+    protected virtual void OnMouseDown(Point location, MouseButton button)
     {
         MouseDown?.Invoke(this, new MouseButtonEventArgs(location, button));
+    }
+
+    protected virtual void OnMouseWheel(Point location, MouseButton button)
+    {
+        MouseWheel?.Invoke(this, new MouseButtonEventArgs(location, button));
     }
 }
